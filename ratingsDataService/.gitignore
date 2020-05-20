@@ -3,6 +3,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+mvnw
+mvnw.cmd
+ratingsDataService.iml
+HELP.md
 
 ### STS ###
 .apt_generated
