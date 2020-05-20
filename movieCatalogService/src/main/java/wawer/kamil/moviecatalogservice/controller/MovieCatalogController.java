@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import wawer.kamil.moviecatalogservice.model.CatalogItem;
 import wawer.kamil.moviecatalogservice.model.Movie;
@@ -26,7 +25,7 @@ public class MovieCatalogController {
 
         List<Rating> ratings = builder.build()
                 .get()
-                .uri("http://localhost:8082/ratingsData/users/"+ userId)
+                .uri("http://Ratings-Data-Service/ratingsData/users/"+ userId)
                 .retrieve()
                 .bodyToFlux(Rating.class)
                 .collectList()
@@ -36,7 +35,7 @@ public class MovieCatalogController {
                 .map(rating -> {
                    Movie movie = builder.build()
                             .get()
-                            .uri("http://localhost:8081/movies/"+  rating.getId())
+                            .uri("http://Movie-Info-Service/movies/"+  rating.getId())
                             .retrieve()
                             .bodyToMono(Movie.class)
                             .block();
