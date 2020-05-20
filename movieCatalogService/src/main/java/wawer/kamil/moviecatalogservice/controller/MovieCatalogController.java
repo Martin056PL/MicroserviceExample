@@ -11,7 +11,6 @@ import wawer.kamil.moviecatalogservice.model.CatalogItem;
 import wawer.kamil.moviecatalogservice.model.Movie;
 import wawer.kamil.moviecatalogservice.model.Rating;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,20 +19,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MovieCatalogController {
 
-    private final RestTemplate template;
     private final WebClient.Builder builder;
 
     @GetMapping("/{userId}")
     public List<CatalogItem> getCatalog(@PathVariable("userId") Long userId) {
 
-        List<Rating> ratings = Arrays.asList(
-                new Rating(1L, 4),
-                new Rating(3L, 3)
-        );
+        List<Rating> ratings = builder.build()
+                .get()
+                .uri("http://localhost:8082/ratingsData/users/"+ userId)
+                .retrieve()
+                .bodyToFlux(Rating.class)
+                .collectList()
+                .block();
 
         return ratings.stream()
                 .map(rating -> {
-                    //Movie movie = template.getForObject("http://localhost:8081/movies/"+  rating.getId(), Movie.class);
                    Movie movie = builder.build()
                             .get()
                             .uri("http://localhost:8081/movies/"+  rating.getId())
