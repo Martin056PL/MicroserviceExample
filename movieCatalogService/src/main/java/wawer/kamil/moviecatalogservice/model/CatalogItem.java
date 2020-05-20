@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CatalogItem {
 
-    private String name;
+    private String title;
     private String description;
     private int rating;
 
