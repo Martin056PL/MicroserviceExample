@@ -1,5 +1,6 @@
 package wawer.kamil.moviecatalogservice.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,6 +15,7 @@ public class MovieServiceImpl implements MovieService {
     private final WebClient.Builder builder;
 
     @Override
+    @HystrixCommand(fallbackMethod = "fallbackGetMovie")
     public Movie getMovie(Rating rating) {
         return builder.build()
                 .get()
@@ -21,5 +23,9 @@ public class MovieServiceImpl implements MovieService {
                 .retrieve()
                 .bodyToMono(Movie.class)
                 .block();
+    }
+
+    private Movie fallbackGetMovie(Rating rating){
+        return new Movie(1L, "error");
     }
 }
